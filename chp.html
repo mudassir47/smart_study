@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chapter Activity</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    li {
+      margin: 10px;
+      flex: 1 0 calc(33.333% - 20px); /* Three items per row on larger screens */
+      max-width: calc(33.333% - 20px);
+      text-align: center;
+    }
+    a {
+      text-decoration: none;
+      color: #333;
+      padding: 20px; /* Increased padding for larger buttons */
+      border-radius: 5px;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      display: inline-block;
+      width: 100%;
+    }
+    a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    @media screen and (max-width: 600px) {
+      li {
+        flex: 1 0 calc(50% - 20px); /* Two items per row on smaller screens */
+        max-width: calc(50% - 20px);
+      }
+    }
+    @media screen and (max-width: 400px) {
+      li {
+        flex: 1 0 calc(100% - 20px); /* Single item per row on even smaller screens */
+        max-width: calc(100% - 20px);
+      }
+    }
+  </style>
+  <script>
+    function redirectToText(chpNumber) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const subject = urlParams.get('subject');
+      // Retrieve the existing chapter parameter if it exists, or set it to the clicked chapter
+      const chapter = chpNumber || urlParams.get('chp');
+      window.location.href = `text.html?subject=${subject}&chp=m${chapter}`;
+    }
+  </script>
+</head>
+<body>
+  <!-- Your chapter links -->
+  <ul>
+    <li><a href="#" onclick="redirectToText(1)">Module 1</a></li>
+    <li><a href="#" onclick="redirectToText(2)">Module 2</a></li>
+    <li><a href="#" onclick="redirectToText(3)">Module 3</a></li>
+    <li><a href="#" onclick="redirectToText(4)">Module 4</a></li>
+    <li><a href="#" onclick="redirectToText(5)">Module 5</a></li>
+    <li><a href="#" onclick="redirectToText(6)">Module 6</a></li>
+    <!-- Add more chapters as needed -->
+  </ul>
+</body>
+</html>

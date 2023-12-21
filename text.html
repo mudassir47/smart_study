@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chemistry Videos</title>
+  <style>
+     body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .video-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .video-item {
+      margin: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+    .video-thumbnail {
+    width: 300px; /* Set a fixed width */
+    height: 169px; /* Set a height maintaining a 16:9 aspect ratio */
+    object-fit: cover;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+    .video-details {
+      padding: 15px;
+    }
+    .video-details h3 {
+      margin-top: 0;
+      font-size: 1.2em;
+    }
+    .video-details p {
+      margin: 5px 0;
+    }
+    .video-details a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .video-details a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <ul id="videoList" class="video-list"></ul>
+
+  <!-- Firebase JavaScript SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js';
+    import { getDatabase, ref, get } from 'https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js';
+
+    // Firebase configuration
+    const firebaseConfig = {
+    apiKey: "AIzaSyBz142pojAcCqziMANprNHS0BnDnyYYEaw",
+    authDomain: "mkmods-61cd1.firebaseapp.com",
+    databaseURL: "https://mkmods-61cd1-default-rtdb.firebaseio.com",
+    projectId: "mkmods-61cd1",
+    storageBucket: "mkmods-61cd1.appspot.com",
+    messagingSenderId: "751690799830",
+    appId: "1:751690799830:web:6ecf771f395e6203e78777",
+    measurementId: "G-SSZ2GNKCN3"
+  };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const videosRef = ref(database, 'chemistry_videos');
+
+// Function to extract subject from URL
+function getSubjectFromURL() {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const subjectParam = urlParams.get('subject');
+  if (subjectParam) {
+    const subject = subjectParam.split('%20')[0]; // Extract the subject name
+    return subject;
+  }
+  return null;
+}
+
+// Function to extract chapter code from URL
+function getChapterFromURL() {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const chapterParam = urlParams.get('chp');
+  return chapterParam ? chapterParam : null;
+}
+
+// Function to fetch and display videos based on subject and chapter
+function fetchVideosBySubjectAndChapter(subject, chapter) {
+  get(videosRef).then((snapshot) => {
+    const videoList = document.getElementById('videoList');
+    snapshot.forEach((childSnapshot) => {
+      const childData = childSnapshot.val();
+
+      // Check if both 'type' and 'chp' match the parameters from the URL
+      if (
+        childData.type.toLowerCase() === subject.toLowerCase() &&
+        childData.chp.toLowerCase() === chapter.toLowerCase()
+      ) {
+        // Create HTML elements for each video
+        const listItem = document.createElement('li');
+        listItem.className = 'video-item';
+
+        // Create image element for thumbnail
+        const thumbnailImg = document.createElement('img');
+        thumbnailImg.className = 'video-thumbnail';
+        thumbnailImg.src = `https://img.youtube.com/vi/${childData.id2}/hqdefault.jpg`;
+
+        thumbnailImg.alt = 'Video Thumbnail';
+        listItem.appendChild(thumbnailImg);
+
+        // Create div for video details
+        const videoDetails = document.createElement('div');
+        videoDetails.className = 'video-details';
+        videoDetails.innerHTML = `
+          <h3>${childData.title}</h3>
+          <p><strong>Type:</strong> ${childData.type}</p>
+          <p><strong>Chapter:</strong> ${childData.chp}</p>
+          <p><a href="${childData.id}">${childData.title}</a></p>
+        `;
+        listItem.appendChild(videoDetails);
+
+        videoList.appendChild(listItem);
+      }
+    });
+  }).catch((error) => {
+    console.error("Error fetching videos: ", error);
+  });
+}
+
+// Get subject and chapter from URL and fetch videos based on both
+const subjectFromURL = getSubjectFromURL();
+const chapterFromURL = getChapterFromURL();
+if (subjectFromURL && chapterFromURL) {
+  fetchVideosBySubjectAndChapter(subjectFromURL, chapterFromURL);
+}
+    
+  </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Engineering Subjects</title>
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    function redirectToText(chpNumber) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const subject = urlParams.get('subject');
+      window.location.href = `text.html?subject=${subject}&chp=${chpNumber}`;
+    }
+  </script>
+</head>
+<body>
+  <h1>Engineering Subjects</h1>
+  <ul id="engineering-list">
+    <li><a href="chp.html?subject=maths">Mathematics - IV</a></li>
+    <li><a href="chp.html?subject=ci">Controls and Instrumentation</a></li>
+    <li><a href="chp.html?subject=ec">Electronic Circuits</a></li>
+    <li><a href="chp.html?subject=mm">Microprocessors and Microcontrollers</a></li>
+    <li><a href="chp.html?subject=dsat">Discrete Structures and Automata Theory</a></li>
+  </ul>
+</body>
+</html>
+
